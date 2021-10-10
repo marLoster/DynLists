@@ -21,6 +21,8 @@ CMakeFiles/dynlists.dir/dynlists.c.obj: ../dynlists.c \
   D:/tu/compiler/x86_64-w64-mingw32/include/swprintf.inl \
   D:/tu/compiler/x86_64-w64-mingw32/include/sec_api/stdio_s.h \
   D:/tu/compiler/x86_64-w64-mingw32/include/_mingw_print_pop.h \
+  D:/tu/compiler/x86_64-w64-mingw32/include/string.h \
+  D:/tu/compiler/x86_64-w64-mingw32/include/sec_api/string_s.h \
   ../dynlists.h
 
 CMakeFiles/dynlists.dir/main.c.obj: ../main.c \
@@ -74,6 +76,8 @@ D:/tu/compiler/lib/gcc/x86_64-w64-mingw32/5.1.0/include-fixed/limits.h:
 
 D:/tu/compiler/lib/gcc/x86_64-w64-mingw32/5.1.0/include-fixed/syslimits.h:
 
+D:/tu/compiler/x86_64-w64-mingw32/include/string.h:
+
 D:/tu/compiler/x86_64-w64-mingw32/include/sec_api/stdlib_s.h:
 
 D:/tu/compiler/x86_64-w64-mingw32/include/malloc.h:
@@ -85,6 +89,8 @@ D:/tu/compiler/x86_64-w64-mingw32/include/_mingw_off_t.h:
 D:/tu/compiler/x86_64-w64-mingw32/include/swprintf.inl:
 
 D:/tu/compiler/x86_64-w64-mingw32/include/sec_api/stdio_s.h:
+
+D:/tu/compiler/x86_64-w64-mingw32/include/sec_api/string_s.h:
 
 ../dynlists.h:
 

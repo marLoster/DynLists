@@ -22,6 +22,8 @@ CMakeFiles/dynlists.dir/dynlists.c.obj
  D:/tu/compiler/x86_64-w64-mingw32/include/swprintf.inl
  D:/tu/compiler/x86_64-w64-mingw32/include/sec_api/stdio_s.h
  D:/tu/compiler/x86_64-w64-mingw32/include/_mingw_print_pop.h
+ D:/tu/compiler/x86_64-w64-mingw32/include/string.h
+ D:/tu/compiler/x86_64-w64-mingw32/include/sec_api/string_s.h
  C:/Users/Admin/Documents/GitHub/DynList/dynlists.h
 
 CMakeFiles/dynlists.dir/main.c.obj
