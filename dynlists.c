@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include "dynlists.h"
 
 dlist *dlist_new() {
@@ -7,6 +8,8 @@ dlist *dlist_new() {
     aux->count=0;
     aux->head=NULL;
     aux->tail=NULL;
+    aux->print_functions=NULL;
+    aux->compare_functions=NULL;
     return aux;
 }
 
@@ -79,3 +82,20 @@ void dlist_print_int(void *data) {
     printf("%d, ",*integer);
     return;
 }
+
+void dlist_add_printing_function(dlist *list, print_func fun, char *type) {
+    if (!list) {
+        return;
+    }
+
+    if (!(list->print_functions)) {
+        list->print_functions = malloc(sizeof(print_func_and_code));
+        list->print_functions[0].function = fun;
+        strcpy(list->print_functions[0].type, type);
+    }
+
+    //Case with several functions
+}
+void dlist_add_compare_function(dlist *, cmp_func, char *);
+void dlist_clear_printing_functions(dlist *);
+void dlist_clear_compare_functions(dlist *);

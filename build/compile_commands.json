@@ -1,0 +1,12 @@
+[
+{
+  "directory": "C:/Users/Admin/Documents/GitHub/DynList/build",
+  "command": "D:\\tu\\compiler\\bin\\x86_64-w64-mingw32-gcc.exe  @CMakeFiles/dynlists.dir/includes_C.rsp -g -o CMakeFiles\\dynlists.dir\\main.c.obj -c C:\\Users\\Admin\\Documents\\GitHub\\DynList\\main.c",
+  "file": "C:/Users/Admin/Documents/GitHub/DynList/main.c"
+},
+{
+  "directory": "C:/Users/Admin/Documents/GitHub/DynList/build",
+  "command": "D:\\tu\\compiler\\bin\\x86_64-w64-mingw32-gcc.exe  @CMakeFiles/dynlists.dir/includes_C.rsp -g -o CMakeFiles\\dynlists.dir\\dynlists.c.obj -c C:\\Users\\Admin\\Documents\\GitHub\\DynList\\dynlists.c",
+  "file": "C:/Users/Admin/Documents/GitHub/DynList/dynlists.c"
+}
+]

@@ -1,0 +1,3 @@
+"C:\Program Files\CMake\bin\cmake.exe" -E rm -f CMakeFiles\dynlists.dir/objects.a
+D:\tu\compiler\bin\ar.exe qc CMakeFiles\dynlists.dir/objects.a @CMakeFiles\dynlists.dir\objects1.rsp
+D:\tu\compiler\bin\x86_64-w64-mingw32-gcc.exe -g -Wl,--whole-archive CMakeFiles\dynlists.dir/objects.a -Wl,--no-whole-archive -o dynlists.exe -Wl,--out-implib,libdynlists.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\dynlists.dir\linklibs.rsp

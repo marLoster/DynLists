@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "test.h"
+#include "dynlists.h"
 
 void create_and_add_int(dlist *list) {
     
