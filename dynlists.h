@@ -4,15 +4,16 @@
 typedef void (*print_func)(void *);
 typedef int (*cmp_func)(const void *,const void *);
 
-typedef struct print_function_and_code {
-    print_func function;
+typedef struct single_type {
+    print_func print_function;
+    cmp_func cmp_function;
     char type[20];
-} print_func_and_code;
+} type_data;
 
-typedef struct cmp_function_and_type {
-    cmp_func function;
-    char type[20];
-} cmp_func_and_type;
+typedef struct fun_library {
+    type_data array;
+    int size;
+} function_library;
 
 typedef struct single_node {
     struct single_node *prev;
@@ -25,10 +26,7 @@ typedef struct list_interface {
     dnode *head;
     dnode *tail;
     int count;
-    print_func_and_code print_functions;
-    int print_count;
-    cmp_func_and_type compare_functions;
-    int compare_count;
+    function_library functions;
 } dlist;
 
 
@@ -40,7 +38,13 @@ void dlist_print_with_func(dlist *, print_func);
 void dlist_print_int(void *);
 void dlist_add_printing_function(dlist *, print_func, char *);
 void dlist_add_compare_function(dlist *, cmp_func, char *);
-void dlist_clear_printing_functions(dlist *);
-void dlist_clear_compare_functions(dlist *);
+void dlist_clear_functions(dlist *);
+void func_clear(function_library *);
+void func_add_print(function_library *, print_func, char *);
+void func_add_cmp(function_library *, cmp_func, char *);
+void dlist_set_functions(dlist *, function_library *);
+function_library *dlist_get_functions(dlist *);
+void func_delete(function_library *);
+function_library *func_create();
 
 #endif

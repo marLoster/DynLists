@@ -83,19 +83,15 @@ void dlist_print_int(void *data) {
     return;
 }
 
-void dlist_add_printing_function(dlist *list, print_func fun, char *type) {
-    if (!list) {
-        return;
-    }
+void func_clear(function_library *functions) {
+    functions->size=0;
+    free(functions->array);
+    functions->array=NULL;
+} 
+void func_add_print(function_library *, print_func, char *);
+void func_add_cmp(function_library *, cmp_func, char *);
 
-    if (!(list->print_functions)) {
-        list->print_functions = malloc(sizeof(print_func_and_code));
-        list->print_functions[0].function = fun;
-        strcpy(list->print_functions[0].type, type);
-    }
-
-    //Case with several functions
-}
+void dlist_add_printing_function(dlist *, print_func, char *);
 void dlist_add_compare_function(dlist *, cmp_func, char *);
-void dlist_clear_printing_functions(dlist *);
-void dlist_clear_compare_functions(dlist *);
+void dlist_clear_functions(dlist *);
+
