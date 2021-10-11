@@ -135,6 +135,32 @@ void dlist_print(dlist *list) {
     return;
 }
 
+void dlist_printb(dlist *list) {
+    if (!list) {
+        return;
+    }
+
+    dnode* iterator=list->tail;
+
+    while(iterator) {
+
+        for(int i=0;i<list->functions->size;i++) {
+            if (!strcmp(iterator->type,list->functions->array[i].type)) {
+                list->functions->array[i].print_function(iterator->data);
+                break;
+            }
+        }
+
+        iterator = iterator->prev;
+        if (iterator) {
+            printf(", ");
+        }
+    }
+
+    printf("\n");
+    return;
+}
+
 void dlist_print_int(void *data) {
     int *integer = (int *) data;
     printf("%d",*integer);
@@ -147,6 +173,20 @@ void dlist_print_string(void *data) {
     return;
 }
 
+int dlist_compare_int(const void *one ,const void *two) {
+    const int *a = (const int *)one;
+    const int *b = (const int *)two;
+
+    return *a - *b;
+}
+
+int dlist_compare_string(const void *one ,const void *two) {
+    const char *a = (const char *)one;
+    const char *b = (const char *)two;
+
+    return strcmp(a,b);
+}
+
 void *dlist_pop(dlist *list, int index) {
     if (!list) {
         return NULL;
@@ -154,6 +194,10 @@ void *dlist_pop(dlist *list, int index) {
 
     if (list->count-1<index) {
         return NULL;
+    }
+
+    if (index<0) {
+        index = list->count + index;
     }
 
     if (index<0) {
@@ -206,6 +250,222 @@ void *dlist_pop(dlist *list, int index) {
     free(node_iterator);
     list->count -= 1;
     return res;
+}
+
+void dlist_insert(dlist *list,int index, void *data,char *type) {
+    if (!list) {
+        return;
+    }
+
+    if (index>=list->count) {
+        dlist_append(list, data, type);
+        return;
+    }
+
+    if (index<0) {
+        index = list->count + index;
+    }
+
+    dnode *aux;
+    
+    if (index<=0) {
+        aux = malloc(sizeof(dnode));
+        aux->data=data;
+        aux->next=list->head;
+        aux->prev=NULL;
+        strcpy(aux->type,type);
+        list->count+=1;
+        list->head=aux;
+        return;
+    }
+
+    int iterator = 0;
+    dnode *node_iterator = list->head;
+    while (iterator != index) {
+        node_iterator = node_iterator->next;
+        iterator++;
+    }
+    
+    aux = malloc(sizeof(dnode));
+    aux->data=data;
+    aux->next=node_iterator;
+    aux->prev=node_iterator->prev;
+    strcpy(aux->type,type);
+    node_iterator->prev=aux;
+    aux->prev->next=aux;
+    list->count+=1;
+
+    return;
+}
+
+void dlist_append_list(dlist *dest, dlist *src) {
+    if (!(dest && src)) {
+        return;
+    }
+
+    if (src->head==NULL) {
+        return;
+    }
+    
+    if(dest->head == NULL) {
+        dest->head=src->head;
+        dest->tail=src->tail;
+        dest->count=src->count;
+        src->head=NULL;
+        src->tail=NULL;
+        src->count=0;        
+        return;
+    }
+
+    src->head->prev=dest->tail;
+    dest->tail->next=src->head;
+    dest->count+=src->count;
+    src->head=NULL;
+    src->tail=NULL;
+    src->count=0; 
+    return;
+}
+
+void dlist_reverse(dlist *list) {
+    if (list==NULL || list->count<2) {
+        return;
+    }
+
+    dnode *iterator = list->head;
+    dnode *aux;
+
+    while(iterator) {
+        aux = iterator->prev;
+        iterator->prev = iterator->next;
+        iterator->next = aux;
+        iterator = iterator->prev;
+    }
+
+    aux = list->head;
+    list->head = list->tail;
+    list->tail=aux;
+
+    return;
+}
+
+int dlist_count(dlist *list , void *target, char *type) {
+    if (!list) {
+        return -1;
+    }
+
+    cmp_func compare_function=NULL;
+
+    for(int i=0;i<list->functions->size;i++) {
+        if (strcmp(list->functions->array[i].type,type)==0) {
+            compare_function = list->functions->array[i].cmp_function;
+            break;
+        }
+    }
+
+    if (!compare_function) {
+        return -1;
+    }
+
+    dnode *iterator=list->head;
+    int count=0;
+
+    while(iterator) {
+        if (strcmp(iterator->type,type)==0) {
+            if (compare_function(iterator->data,target)==0) {
+                count+=1;
+            }
+        }
+        iterator=iterator->next;
+    }
+
+    return count;
+}
+
+int dlist_index(dlist *list , void *target, char *type) {
+    if (!list) {
+        return -1;
+    }
+
+    cmp_func compare_function=NULL;
+
+    for(int i=0;i<list->functions->size;i++) {
+        if (strcmp(list->functions->array[i].type,type)==0) {
+            compare_function = list->functions->array[i].cmp_function;
+            break;
+        }
+    }
+
+    if (!compare_function) {
+        return -1;
+    }
+
+    dnode *iterator=list->head;
+    int index = 0;
+
+    while(iterator) {
+        if (strcmp(iterator->type,type)==0) {
+            if (compare_function(iterator->data,target)==0) {
+                return index;
+            }
+        }
+        iterator=iterator->next;
+        index++;
+    }
+
+    return -1;    
+}
+
+int dlist_indexb(dlist *list , void *target, char *type) {
+    if (!list) {
+        return -1;
+    }
+
+    cmp_func compare_function=NULL;
+
+    for(int i=0;i<list->functions->size;i++) {
+        if (strcmp(list->functions->array[i].type,type)==0) {
+            compare_function = list->functions->array[i].cmp_function;
+            break;
+        }
+    }
+
+    if (!compare_function) {
+        return -1;
+    }
+
+    dnode *iterator=list->tail;
+    int index = list->count-1;
+
+    while(iterator) {
+        if (strcmp(iterator->type,type)==0) {
+            if (compare_function(iterator->data,target)==0) {
+                return index;
+            }
+        }
+        iterator=iterator->prev;
+        index--;
+    }
+
+    return -1;    
+}
+
+void dlist_remove(dlist *list, void *target, char *type) {
+
+    int index = dlist_index(list,target,type);
+    if (index<0) {
+        return;
+    }
+    free(dlist_pop(list,index));
+    return;
+}
+void dlist_removeb(dlist *list, void *target, char *type) {
+
+    int index = dlist_indexb(list,target,type);
+    if (index<0) {
+        return;
+    }
+    free(dlist_pop(list,index));
+    return;
 }
 
 void func_clear(function_library *functions) {

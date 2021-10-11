@@ -31,18 +31,33 @@ typedef struct list_interface {
 
 
 dlist *dlist_new();
+
 void dlist_add(dlist *,void *);
 void dlist_append(dlist *,void *,char *);
 void dlist_clear(dlist *);
 void dlist_delete(dlist *);
 void dlist_print_with_func(dlist *, print_func);
+
 void dlist_print_int(void *);
 void dlist_print_string(void *);
+int dlist_compare_int(const void *,const void *);
+int dlist_compare_string(const void *,const void *);
+
 void dlist_print(dlist *);
+void dlist_printb(dlist *);
 void dlist_add_printing_function(dlist *, print_func, char *);
 void dlist_add_compare_function(dlist *, cmp_func, char *);
 void dlist_clear_functions(dlist *);
+void dlist_insert(dlist *,int, void *,char *);
 void *dlist_pop(dlist *, int);
+void dlist_append_list(dlist *, dlist *);
+void dlist_reverse(dlist *);
+void dlist_remove(dlist *, void *, char *);
+void dlist_removeb(dlist *, void *, char *);
+int dlist_count(dlist *, void *, char *);
+int dlist_index(dlist *, void *, char *);
+int dlist_indexb(dlist *, void *, char *);
+
 void func_clear(function_library *);
 void func_add_print(function_library *, print_func, char *);
 void func_add_cmp(function_library *, cmp_func, char *);
