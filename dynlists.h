@@ -54,9 +54,19 @@ void dlist_append_list(dlist *, dlist *);
 void dlist_reverse(dlist *);
 void dlist_remove(dlist *, void *, char *);
 void dlist_removeb(dlist *, void *, char *);
+void *dlist_get(dlist *, int);
+void dlist_set(dlist *list, void *data, int index);
 int dlist_count(dlist *, void *, char *);
 int dlist_index(dlist *, void *, char *);
 int dlist_indexb(dlist *, void *, char *);
+void dlist_print_ptrs(dlist *list);
+
+void dlist_sort(dlist *);
+void dlist_quicksort(dlist *,dnode *, dnode *);
+dnode *dlist_partition(dlist *,dnode *, dnode *);
+int dlist_general_compare(dlist *,dnode *, dnode *);
+void dlist_swap(dlist *, dnode *, dnode *);
+int check_position(dnode *head, dnode *tail);
 
 void func_clear(function_library *);
 void func_add_print(function_library *, print_func, char *);

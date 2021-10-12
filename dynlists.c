@@ -468,6 +468,220 @@ void dlist_removeb(dlist *list, void *target, char *type) {
     return;
 }
 
+void *dlist_get(dlist *list, int index) {
+    
+    if (!list) {
+        return NULL;
+    }
+    
+    int iterator=0;
+    dnode* node_iterator=list->head;
+
+    while(iterator!=index) {
+        node_iterator = node_iterator->next;
+        iterator++;
+    }
+
+    return node_iterator->data;
+}
+
+void dlist_set(dlist *list, void *data, int index) {
+    if (!list) {
+        return;
+    }
+    
+    int iterator=0;
+    dnode* node_iterator=list->head;
+
+    while(iterator!=index) {
+        node_iterator = node_iterator->next;
+        iterator++;
+    }
+
+    node_iterator->data=data;
+    return;
+}
+
+void dlist_sort(dlist *list) {
+    if (!list || list->head==NULL) {
+        return;
+    }
+
+    dlist_quicksort(list, list->head,list->tail);
+    return;
+
+}
+
+int check_position(dnode *head, dnode *tail) {
+    dnode *iterator = head;
+    while(iterator) {
+        iterator=iterator->next;
+        if (iterator==tail) {
+            return 1;
+        }
+    }
+
+    return 0;
+}
+
+void dlist_quicksort(dlist *list, dnode *head, dnode *tail) {
+    if(check_position(head,tail)) {
+        //printf("position correct\n");
+        dnode *border = dlist_partition(list, head,tail);
+        //printf("partition finished\n");
+        dlist_print(list);
+        dlist_quicksort(list, head,border);
+        dlist_quicksort(list, border->next,tail);
+    }
+    return;
+}
+
+void dlist_print_ptrs(dlist *list) {
+    if (!list) {
+        return;
+    }
+
+    dnode *iterator = list->head;
+
+    while(iterator) {
+        printf("%p: ^%p^ v%pv\n", iterator, iterator->prev, iterator->next);
+        iterator=iterator->next;
+    }
+    return;
+}
+
+dnode *dlist_partition(dlist *list, dnode *head, dnode *tail) {
+
+    dnode left_start;
+    left_start.next = head;
+    dnode *left_iterator = &left_start;
+    
+    dnode right_start;
+    right_start.prev = tail;
+    dnode *right_iterator = &right_start;
+
+    dnode *aux;
+
+    while(1) {
+        //printf("partition loop\n");
+        do {
+            if (right_iterator)
+            right_iterator=right_iterator->prev;
+            //printf("right: %p\n",right_iterator);
+        } while(dlist_general_compare(list, right_iterator,head)>0 && right_iterator);
+        //printf("right on position\n");
+
+        do {
+            if (left_iterator)
+            left_iterator = left_iterator->next;
+        } while(dlist_general_compare(list, left_iterator,head)<0 && left_iterator);
+        //printf("left on position\n");
+
+        if (check_position(left_iterator,right_iterator)) {
+            //printf("begin swap\n");
+            dlist_swap(list, left_iterator,right_iterator);
+            aux = right_iterator;
+            right_iterator = left_iterator;
+            left_iterator = aux;
+            //printf("swap finished\n");
+            //dlist_print_ptrs(list);
+            //dlist_print(list);
+        }
+        else {
+            return right_iterator;
+        }
+    }
+
+}
+
+int dlist_general_compare(dlist *list, dnode *a, dnode *b) {
+    
+    if (strcmp(a->type,b->type)) {
+        return strcmp(a->type,b->type);
+    }
+
+    cmp_func compare_function=NULL;
+
+    for(int i=0;i<list->functions->size;i++) {
+        if (strcmp(list->functions->array[i].type,a->type)==0) {
+            compare_function = list->functions->array[i].cmp_function;
+            break;
+        }
+    }
+
+    if (!compare_function) {
+        return 0;
+    }
+
+    return compare_function(a->data,b->data);
+
+}
+
+void dlist_swap(dlist *list,dnode *a, dnode *b) {
+    
+    //a must be before b if you want this to work!
+    
+    if (!a || !b) {
+        return;
+    }
+
+    if (a->next==b) {
+        
+        if (a->prev) {
+            a->prev->next=b;
+        }
+        else {
+            list->head=b;
+        }
+
+        if (b->next) {
+            b->next->prev=a;
+        }
+        else {
+            list->tail=a;
+        }
+
+        a->next=b->next;
+        b->next=a;
+        b->prev=a->prev;
+        a->prev=b;
+
+        return;
+    }
+
+    a->next->prev=b;
+
+    if (a->prev) {
+        a->prev->next=b;
+    }
+    else {
+        list->head=b;
+    }
+
+    b->prev->next=a;
+
+    if (b->next) {
+        b->next->prev=a;
+    }
+    else {
+        list->tail=a;
+    }
+
+    dnode *aux;
+
+    aux = b->prev;
+    b->prev = a->prev;
+    a->prev = aux;
+
+    aux = b->next;
+    b->next = a->next;
+    a->next = aux;
+
+    return;
+}
+
+
+
 void func_clear(function_library *functions) {
     functions->size=0;
     free(functions->array);

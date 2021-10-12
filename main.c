@@ -39,9 +39,17 @@ int main() {
     dlist_add_compare_function(list, dlist_compare_int, "int");
     dlist_add_compare_function(list, dlist_compare_string, "string");
 
-    for(int i=0;i<20;i++)
+    for(int i=0;i<4;i++)
         create_and_add_int(list);
-    for(int i=0;i<7;i++)
+    for(int i=0;i<3;i++)
+        create_and_add_string(list);
+    for(int i=0;i<4;i++)
+        create_and_add_int(list);
+    for(int i=0;i<3;i++)
+        create_and_add_string(list);
+    for(int i=0;i<4;i++)
+        create_and_add_int(list);
+    for(int i=0;i<3;i++)
         create_and_add_string(list);
 
     //dlist_set_functions(list_b, dlist_get_functions(list));    
@@ -49,14 +57,21 @@ int main() {
     //for(int i=0;i<5;i++)
     //    create_and_add_int(list_b);
     int target = 0;
+    int *aux = malloc(sizeof(int));
+    //int *tmp = *((int *)dlist_get(list,4));
+    *aux = 29;
 
+    //dlist_print_ptrs(list);
     dlist_print(list);
     //dlist_insert(list,-3,malloc_rand_int(),"int");
     //dlist_pop(list, -10);
-    dlist_remove(list, &target, "int");
-    dlist_removeb(list, &target, "int");
+    //dlist_remove(list, &target, "int");
+    //dlist_removeb(list, &target, "int");
+    // printf("%d\n", *((int *)dlist_get(list,1))); 
+    // free(dlist_get(list,1));
+    // dlist_set(list, aux, 1);
+    dlist_sort(list);
     dlist_print(list);
-
 
     dlist_delete(list);
 
