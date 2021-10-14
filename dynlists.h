@@ -62,8 +62,8 @@ int dlist_indexb(dlist *, void *, char *);
 void dlist_print_ptrs(dlist *list);
 
 void dlist_sort(dlist *);
-void dlist_quicksort(dlist *,dnode *, dnode *);
-dnode *dlist_partition(dlist *,dnode *, dnode *);
+void dlist_quicksort(dlist *,int , int);
+int dlist_partition(dlist *,int , int);
 int dlist_general_compare(dlist *,dnode *, dnode *);
 void dlist_swap(dlist *, dnode *, dnode *);
 int check_position(dnode *head, dnode *tail);

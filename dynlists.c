@@ -502,12 +502,45 @@ void dlist_set(dlist *list, void *data, int index) {
     return;
 }
 
+int dlist_get_index(dlist *list, dnode* node) {
+        if (!list || !node) {
+        return -1;
+    }
+
+    int index = 0;
+    dnode *iterator = list->head; 
+
+    while(iterator!=node && iterator) {
+        iterator=iterator->next;
+        index++;
+    }
+
+    return index;
+}
+
+dnode* dlist_get_node(dlist *list, int index) {
+    if (!list) {
+        return NULL;
+    }
+
+    int count=0;
+    dnode *iterator = list->head;
+
+    while(count!=index && iterator) {
+        iterator=iterator->next;
+        count++;
+    }
+
+    return iterator;
+
+}
+
 void dlist_sort(dlist *list) {
-    if (!list || list->head==NULL) {
+    if (!list || list->head==NULL || list->count==1) {
         return;
     }
 
-    dlist_quicksort(list, list->head,list->tail);
+    dlist_quicksort(list, dlist_get_index(list,list->head),dlist_get_index(list,list->tail));
     return;
 
 }
@@ -524,14 +557,14 @@ int check_position(dnode *head, dnode *tail) {
     return 0;
 }
 
-void dlist_quicksort(dlist *list, dnode *head, dnode *tail) {
-    if(check_position(head,tail)) {
+void dlist_quicksort(dlist *list, int left, int right) {
+    if(left<right) {
         //printf("position correct\n");
-        dnode *border = dlist_partition(list, head,tail);
+        int border = dlist_partition(list, left,right);
         //printf("partition finished\n");
-        dlist_print(list);
-        dlist_quicksort(list, head,border);
-        dlist_quicksort(list, border->next,tail);
+        //dlist_print(list);
+        dlist_quicksort(list, left,border);
+        dlist_quicksort(list, border+1,right);
     }
     return;
 }
@@ -550,15 +583,17 @@ void dlist_print_ptrs(dlist *list) {
     return;
 }
 
-dnode *dlist_partition(dlist *list, dnode *head, dnode *tail) {
+int dlist_partition(dlist *list, int left, int right) {
 
     dnode left_start;
-    left_start.next = head;
+    left_start.next = dlist_get_node(list,left);
     dnode *left_iterator = &left_start;
     
     dnode right_start;
-    right_start.prev = tail;
+    right_start.prev = dlist_get_node(list,right);
     dnode *right_iterator = &right_start;
+
+    dnode *head = dlist_get_node(list,left);
 
     dnode *aux;
 
@@ -588,7 +623,7 @@ dnode *dlist_partition(dlist *list, dnode *head, dnode *tail) {
             //dlist_print(list);
         }
         else {
-            return right_iterator;
+            return dlist_get_index(list,right_iterator);
         }
     }
 

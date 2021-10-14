@@ -39,17 +39,17 @@ int main() {
     dlist_add_compare_function(list, dlist_compare_int, "int");
     dlist_add_compare_function(list, dlist_compare_string, "string");
 
-    for(int i=0;i<4;i++)
+    for(int i=0;i<10;i++)
         create_and_add_int(list);
-    for(int i=0;i<3;i++)
+    for(int i=0;i<4;i++)
         create_and_add_string(list);
-    for(int i=0;i<4;i++)
+    for(int i=0;i<2;i++)
         create_and_add_int(list);
-    for(int i=0;i<3;i++)
+    for(int i=0;i<8;i++)
         create_and_add_string(list);
-    for(int i=0;i<4;i++)
+    for(int i=0;i<13;i++)
         create_and_add_int(list);
-    for(int i=0;i<3;i++)
+    for(int i=0;i<5;i++)
         create_and_add_string(list);
 
     //dlist_set_functions(list_b, dlist_get_functions(list));    
