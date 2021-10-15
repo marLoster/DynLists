@@ -12,32 +12,6 @@ dlist *dlist_new() {
     return aux;
 }
 
-void dlist_add(dlist *list,void *data) {
-    
-    if (!list) {
-        return;
-    }
-
-    if (!(list->head)) {
-        list->head = malloc(sizeof(dnode));
-        list->tail = list->head;
-        list->count = 1;
-        list->head->data=data;
-        list->head->next=NULL;
-        list->head->prev=NULL;
-        return;
-    }
-
-    dnode *aux = list->tail;
-    list->tail->next = malloc(sizeof(dnode));
-    list->tail = list->tail->next;
-    list->count += 1;
-    list->tail->data=data;
-    list->tail->next=NULL;
-    list->tail->prev=aux;
-    return;
-}
-
 void dlist_append(dlist *list,void *data,char *type) {
         
     if (!list) {
@@ -559,10 +533,7 @@ int check_position(dnode *head, dnode *tail) {
 
 void dlist_quicksort(dlist *list, int left, int right) {
     if(left<right) {
-        //printf("position correct\n");
         int border = dlist_partition(list, left,right);
-        //printf("partition finished\n");
-        //dlist_print(list);
         dlist_quicksort(list, left,border);
         dlist_quicksort(list, border+1,right);
     }

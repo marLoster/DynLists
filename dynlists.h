@@ -29,52 +29,57 @@ typedef struct list_interface {
     function_library *functions;
 } dlist;
 
-
 dlist *dlist_new();
 
-void dlist_add(dlist *,void *);
-void dlist_append(dlist *,void *,char *);
-void dlist_clear(dlist *);
-void dlist_delete(dlist *);
-void dlist_print_with_func(dlist *, print_func);
+void dlist_append(dlist *list,void *data,char *type);
+void dlist_clear(dlist *list);
+void dlist_delete(dlist *list);
 
-void dlist_print_int(void *);
-void dlist_print_string(void *);
-int dlist_compare_int(const void *,const void *);
-int dlist_compare_string(const void *,const void *);
+void dlist_print_with_func(dlist *list, print_func printing_function);
+void dlist_print(dlist *list);
+void dlist_printb(dlist *list);
 
-void dlist_print(dlist *);
-void dlist_printb(dlist *);
-void dlist_add_printing_function(dlist *, print_func, char *);
-void dlist_add_compare_function(dlist *, cmp_func, char *);
-void dlist_clear_functions(dlist *);
-void dlist_insert(dlist *,int, void *,char *);
-void *dlist_pop(dlist *, int);
-void dlist_append_list(dlist *, dlist *);
-void dlist_reverse(dlist *);
-void dlist_remove(dlist *, void *, char *);
-void dlist_removeb(dlist *, void *, char *);
-void *dlist_get(dlist *, int);
+void dlist_print_int(void *data);
+void dlist_print_string(void *data);
+int dlist_compare_int(const void *one ,const void *two);
+int dlist_compare_string(const void *one ,const void *two);
+
+void *dlist_pop(dlist *list, int index);
+void dlist_insert(dlist *list,int index, void *data,char *type);
+void dlist_append_list(dlist *dest, dlist *src);
+void dlist_reverse(dlist *list);
+int dlist_count(dlist *list , void *target, char *type);
+int dlist_index(dlist *list , void *target, char *type);
+int dlist_indexb(dlist *list , void *target, char *type);
+void dlist_remove(dlist *list, void *target, char *type);
+void dlist_removeb(dlist *list, void *target, char *type);
+
+void *dlist_get(dlist *list, int index);
 void dlist_set(dlist *list, void *data, int index);
-int dlist_count(dlist *, void *, char *);
-int dlist_index(dlist *, void *, char *);
-int dlist_indexb(dlist *, void *, char *);
-void dlist_print_ptrs(dlist *list);
 
-void dlist_sort(dlist *);
-void dlist_quicksort(dlist *,int , int);
-int dlist_partition(dlist *,int , int);
-int dlist_general_compare(dlist *,dnode *, dnode *);
-void dlist_swap(dlist *, dnode *, dnode *);
+int dlist_get_index(dlist *list, dnode* node);
+dnode* dlist_get_node(dlist *list, int index);
+
+void dlist_sort(dlist *list);
+
 int check_position(dnode *head, dnode *tail);
+void dlist_quicksort(dlist *list, int left, int right);
+void dlist_print_ptrs(dlist *list);
+int dlist_partition(dlist *list, int left, int right);
+int dlist_general_compare(dlist *list, dnode *a, dnode *b);
+void dlist_swap(dlist *list,dnode *a, dnode *b);
 
-void func_clear(function_library *);
-void func_add_print(function_library *, print_func, char *);
-void func_add_cmp(function_library *, cmp_func, char *);
-void dlist_set_functions(dlist *, function_library *);
-function_library *dlist_get_functions(dlist *);
-void func_delete(function_library *);
+void func_clear(function_library *functions);
+void func_add_type(function_library *functions, char *type);
+void func_add_print(function_library *functions, print_func function, char *type);
+void func_add_cmp(function_library *functions, cmp_func function, char *type);
+void func_delete(function_library *functions);
 function_library *func_create();
-void func_add_type(function_library *, char *);
+
+void dlist_add_printing_function(dlist *list, print_func function, char *type);
+void dlist_add_compare_function(dlist *list, cmp_func function, char *type);
+void dlist_clear_functions(dlist *list);
+void dlist_set_functions(dlist *list, function_library *functions);
+function_library *dlist_get_functions(dlist *list);
 
 #endif
