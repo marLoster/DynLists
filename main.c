@@ -2,6 +2,12 @@
 #include <stdlib.h>
 #include "dynlists.h"
 
+/*
+    This program tests DynLists library.
+*/
+
+
+//Auxiliary functions and structures:
 typedef struct test_structure {
     int x;
     int y;
@@ -61,8 +67,9 @@ int* malloc_rand_int() {
 
 int main() {
 
+    //Tests:
+
     dlist* list = dlist_new();
-    //dlist* list_b = dlist_new();
 
     //append test
 

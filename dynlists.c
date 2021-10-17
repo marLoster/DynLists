@@ -4,12 +4,14 @@
 #include "dynlists.h"
 
 dlist *dlist_new() {
+
     dlist* aux = malloc(sizeof(dlist));
     aux->count=0;
     aux->head=NULL;
     aux->tail=NULL;
     aux->functions=func_create();
     return aux;
+
 }
 
 void dlist_append(dlist *list,void *data,char *type) {
@@ -41,17 +43,20 @@ void dlist_append(dlist *list,void *data,char *type) {
 }
 
 void dlist_clear(dlist *list) {
+
     if (!list ) {
         return;
     }
 
     dnode *aux;
+
     while(list->head) {
         aux = list->head->next;
         free(list->head->data);
         free(list->head);
         list->head=aux;
     }
+
     list->head=NULL;
     list->tail=NULL;
     list->count=0;
@@ -59,12 +64,15 @@ void dlist_clear(dlist *list) {
 }
 
 void dlist_delete(dlist *list) {
+
     dlist_clear(list);
     func_delete(list->functions);
     free(list);
+
 }
 
 void dlist_print_with_func(dlist *list, print_func printing_function) {
+
     if (!list) {
         return;
     }
@@ -84,6 +92,7 @@ void dlist_print_with_func(dlist *list, print_func printing_function) {
 }
 
 void dlist_print(dlist *list) {
+
     if (!list) {
         return;
     }
@@ -110,6 +119,7 @@ void dlist_print(dlist *list) {
 }
 
 void dlist_printb(dlist *list) {
+
     if (!list) {
         return;
     }
@@ -136,32 +146,41 @@ void dlist_printb(dlist *list) {
 }
 
 void dlist_print_int(void *data) {
+
     int *integer = (int *) data;
     printf("%d",*integer);
     return;
+
 }
 
 void dlist_print_string(void *data) {
+
     char *string = (char *) data;
     printf("%s", string);
     return;
+
 }
 
 int dlist_compare_int(const void *one ,const void *two) {
+
     const int *a = (const int *)one;
     const int *b = (const int *)two;
 
     return *a - *b;
+
 }
 
 int dlist_compare_string(const void *one ,const void *two) {
+
     const char *a = (const char *)one;
     const char *b = (const char *)two;
 
     return strcmp(a,b);
+
 }
 
 void *dlist_pop(dlist *list, int index) {
+
     if (!list) {
         return NULL;
     }
@@ -211,22 +230,18 @@ void *dlist_pop(dlist *list, int index) {
         return res;
     }
 
-    int iterator = 0;
-    dnode *node_iterator = list->head;
-    while (iterator != index) {
-        node_iterator = node_iterator->next;
-        iterator++;
-    }
+    aux = dlist_get_node(list,index);
 
-    node_iterator->next->prev = node_iterator->prev;
-    node_iterator->prev->next = node_iterator->next;
-    res = node_iterator->data;
-    free(node_iterator);
+    aux->next->prev = aux->prev;
+    aux->prev->next = aux->next;
+    res = aux->data;
+    free(aux);
     list->count -= 1;
     return res;
 }
 
 void dlist_insert(dlist *list,int index, void *data,char *type) {
+
     if (!list) {
         return;
     }
@@ -253,19 +268,15 @@ void dlist_insert(dlist *list,int index, void *data,char *type) {
         return;
     }
 
-    int iterator = 0;
-    dnode *node_iterator = list->head;
-    while (iterator != index) {
-        node_iterator = node_iterator->next;
-        iterator++;
-    }
+
+    dnode *node = dlist_get_node(list,index);
     
     aux = malloc(sizeof(dnode));
     aux->data=data;
-    aux->next=node_iterator;
-    aux->prev=node_iterator->prev;
+    aux->next=node;
+    aux->prev=node->prev;
     strcpy(aux->type,type);
-    node_iterator->prev=aux;
+    node->prev=aux;
     aux->prev->next=aux;
     list->count+=1;
 
@@ -273,6 +284,7 @@ void dlist_insert(dlist *list,int index, void *data,char *type) {
 }
 
 void dlist_append_list(dlist *dest, dlist *src) {
+
     if (!(dest && src)) {
         return;
     }
@@ -302,6 +314,7 @@ void dlist_append_list(dlist *dest, dlist *src) {
 }
 
 void dlist_reverse(dlist *list) {
+
     if (list==NULL || list->count<2) {
         return;
     }
@@ -324,6 +337,7 @@ void dlist_reverse(dlist *list) {
 }
 
 int dlist_count(dlist *list , void *target, char *type) {
+
     if (!list) {
         return -1;
     }
@@ -426,6 +440,10 @@ int dlist_indexb(dlist *list , void *target, char *type) {
 
 void dlist_remove(dlist *list, void *target, char *type) {
 
+    if (!list) {
+        return;
+    }
+
     int index = dlist_index(list,target,type);
     if (index<0) {
         return;
@@ -434,6 +452,10 @@ void dlist_remove(dlist *list, void *target, char *type) {
     return;
 }
 void dlist_removeb(dlist *list, void *target, char *type) {
+
+    if (!list) {
+        return;
+    }
 
     int index = dlist_indexb(list,target,type);
     if (index<0) {
@@ -448,46 +470,33 @@ void *dlist_get(dlist *list, int index) {
     if (!list) {
         return NULL;
     }
-    
-    int iterator=0;
-    dnode* node_iterator=list->head;
-
-    while(iterator!=index) {
-        node_iterator = node_iterator->next;
-        iterator++;
-    }
-
-    return node_iterator->data;
+        
+    return dlist_get_node(list,index)->data;
 }
 
 void dlist_set(dlist *list, void *data, int index) {
     if (!list) {
         return;
     }
-    
-    int iterator=0;
-    dnode* node_iterator=list->head;
 
-    while(iterator!=index) {
-        node_iterator = node_iterator->next;
-        iterator++;
-    }
+    dnode* node = dlist_get_node(list,index);
 
-    node_iterator->data=data;
+    node->data=data;
     return;
 }
 
 int dlist_get_size(dlist *list) {
+    
     if (!list) {
         return -1;
     }
-    
     
     return list->count;
 }
 
 int dlist_get_index(dlist *list, dnode* node) {
-        if (!list || !node) {
+    
+    if (!list || !node) {
         return -1;
     }
 
@@ -503,6 +512,9 @@ int dlist_get_index(dlist *list, dnode* node) {
 }
 
 dnode* dlist_get_node(dlist *list, int index) {
+
+    //HANDLE ALL CASES WHERE THIS FUNCTION IS CALLED BECAUSE IT MAY RETURN NULL!
+    
     if (!list) {
         return NULL;
     }
@@ -551,6 +563,7 @@ void dlist_quicksort(dlist *list, int left, int right) {
 }
 
 void dlist_print_ptrs(dlist *list) {
+    
     if (!list) {
         return;
     }
@@ -579,29 +592,21 @@ int dlist_partition(dlist *list, int left, int right) {
     dnode *aux;
 
     while(1) {
-        //printf("partition loop\n");
         do {
             if (right_iterator)
             right_iterator=right_iterator->prev;
-            //printf("right: %p\n",right_iterator);
         } while(dlist_general_compare(list, right_iterator,head)>0 && right_iterator);
-        //printf("right on position\n");
 
         do {
             if (left_iterator)
             left_iterator = left_iterator->next;
         } while(dlist_general_compare(list, left_iterator,head)<0 && left_iterator);
-        //printf("left on position\n");
 
         if (check_position(left_iterator,right_iterator)) {
-            //printf("begin swap\n");
             dlist_swap(list, left_iterator,right_iterator);
             aux = right_iterator;
             right_iterator = left_iterator;
             left_iterator = aux;
-            //printf("swap finished\n");
-            //dlist_print_ptrs(list);
-            //dlist_print(list);
         }
         else {
             return dlist_get_index(list,right_iterator);
