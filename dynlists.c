@@ -476,6 +476,15 @@ void dlist_set(dlist *list, void *data, int index) {
     return;
 }
 
+int dlist_get_size(dlist *list) {
+    if (!list) {
+        return -1;
+    }
+    
+    
+    return list->count;
+}
+
 int dlist_get_index(dlist *list, dnode* node) {
         if (!list || !node) {
         return -1;

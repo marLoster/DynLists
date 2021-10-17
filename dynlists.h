@@ -56,6 +56,7 @@ void dlist_removeb(dlist *list, void *target, char *type);
 
 void *dlist_get(dlist *list, int index);
 void dlist_set(dlist *list, void *data, int index);
+int dlist_get_size(dlist *list);
 
 int dlist_get_index(dlist *list, dnode* node);
 dnode* dlist_get_node(dlist *list, int index);

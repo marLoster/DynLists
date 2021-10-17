@@ -107,12 +107,43 @@ int main() {
     dlist_print(list);
     dlist_printb(list);
 
+    //pop and get_size test
+    free(dlist_pop(list, 0));
+    free(dlist_pop(list,8));
+    free(dlist_pop(list,dlist_get_size(list)-1));
 
+    //insert test
+    dlist_insert(list,10,malloc_rand_int(),"int");
+
+    //append list test
+    dlist *other_list = dlist_new();
+    for(int i=0;i<10;i++)
+        create_and_add_int(other_list);
+
+    dlist_append_list(list,other_list);
+    dlist_delete(other_list);
+
+    //reverse test
+    dlist_reverse(list);
+
+    //count test
+    int aux = 1;
+    printf("there are %d zeros in the list\n",dlist_count(list, &aux, "int"));
+    printf("first occurnece of zero: %d\n", dlist_index(list, &aux, "int"));
+    printf("last occurence of zero: %d\n", dlist_indexb(list, &aux, "int"));
+    dlist_remove(list, &aux, "int");
+    dlist_removeb(list, &aux, "int");    
+
+    //get_and set_test
+    int *aux_ = dlist_get(list,0);
+    printf("%d\n", *aux);
+    dlist_set(list,malloc_rand_int(),1);
 
     //sort test
     dlist_sort(list);
     dlist_print(list);
 
+    //delete test
     dlist_delete(list);
 
     return 0;
