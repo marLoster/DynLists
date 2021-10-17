@@ -294,6 +294,7 @@ void dlist_append_list(dlist *dest, dlist *src) {
     src->head->prev=dest->tail;
     dest->tail->next=src->head;
     dest->count+=src->count;
+    dest->tail=src->tail;
     src->head=NULL;
     src->tail=NULL;
     src->count=0; 

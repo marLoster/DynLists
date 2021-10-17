@@ -70,6 +70,7 @@ int main() {
         create_and_add_int(list);
 
     //print with func test
+    puts("Basic test");
     dlist_print_with_func(list,dlist_print_int);
 
     //clear test
@@ -86,7 +87,7 @@ int main() {
     
 
     //fill up the list
-    for(int i=0;i<10;i++)
+    for(int i=0;i<5;i++)
         create_and_add_int(list);
     for(int i=0;i<4;i++)
         create_and_add_string(list);
@@ -94,37 +95,47 @@ int main() {
         create_and_add_int(list);
     for(int i=0;i<4;i++)
         create_and_add_structure(list);
-    for(int i=0;i<8;i++)
+    for(int i=0;i<3;i++)
         create_and_add_string(list);
-    for(int i=0;i<13;i++)
+    for(int i=0;i<2;i++)
         create_and_add_int(list);
     for(int i=0;i<5;i++)
         create_and_add_string(list);
     for(int i=0;i<7;i++)
         create_and_add_structure(list);
 
+
     //print test
+    puts("Printing test:");
     dlist_print(list);
+    puts("Printing backwards test:");
     dlist_printb(list);
 
     //pop and get_size test
+    puts("pop test - pop 0 then 8 then last element:");
     free(dlist_pop(list, 0));
     free(dlist_pop(list,8));
     free(dlist_pop(list,dlist_get_size(list)-1));
+    dlist_print(list);
 
     //insert test
+    puts("insert random int at 10:");
     dlist_insert(list,10,malloc_rand_int(),"int");
+    dlist_print(list);
 
     //append list test
+    puts("append list test:");
     dlist *other_list = dlist_new();
     for(int i=0;i<10;i++)
         create_and_add_int(other_list);
-
     dlist_append_list(list,other_list);
     dlist_delete(other_list);
+    dlist_print(list);
 
     //reverse test
+    puts("reverse test:");
     dlist_reverse(list);
+    dlist_print(list);
 
     //count test
     int aux = 1;
@@ -135,11 +146,14 @@ int main() {
     dlist_removeb(list, &aux, "int");    
 
     //get_and set_test
+    puts("get and set test = get 0 and set 1 to random int:");
     int *aux_ = dlist_get(list,0);
-    printf("%d\n", *aux);
+    printf("%d\n", *aux_);
     dlist_set(list,malloc_rand_int(),1);
+    dlist_print(list);
 
     //sort test
+    puts("sort test:");
     dlist_sort(list);
     dlist_print(list);
 
