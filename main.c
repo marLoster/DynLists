@@ -32,6 +32,9 @@ int struct_compare(const void *one, const void *two) {
 void create_and_add_int(dlist *list) {
     
     int *new = malloc(sizeof(int));
+    if (!new) {
+        return;
+    }
     *new = rand()%201 - 100;
     dlist_append(list, new, "int");
     return;
@@ -40,6 +43,10 @@ void create_and_add_int(dlist *list) {
 void create_and_add_structure(dlist *list) {
     
     test_struct *structure = malloc(sizeof(test_struct));
+
+    if (!structure) {
+        return;
+    }
     structure->x = rand()%21 - 10;
     structure->y = rand()%21 - 10;
     dlist_append(list, structure, "structure");
@@ -50,6 +57,11 @@ void create_and_add_string(dlist *list) {
     
     int length = rand()%7 + 4;
     char* string = malloc(sizeof(char)*length);
+    
+    if (!string) {
+        return;
+    }
+
     for(int i=0;i<length-1;i++) {
         string[i] = rand()%26+97;
     }
@@ -61,6 +73,9 @@ void create_and_add_string(dlist *list) {
 
 int* malloc_rand_int() {
     int* random = malloc(sizeof(int));
+    if(!random) {
+        return NULL;
+    }
     *random = rand()%20 + 10000;
     return random;
 }
@@ -156,12 +171,23 @@ int main() {
     puts("get and set test = get 0 and set 1 to random int:");
     int *aux_ = dlist_get(list,0);
     printf("%d\n", *aux_);
+    free(dlist_get(list,1));
     dlist_set(list,malloc_rand_int(),1);
     dlist_print(list);
 
     //sort test
     puts("sort test:");
     dlist_sort(list);
+    dlist_print(list);
+
+    puts("function libraries test:");
+    function_library *funcs = dlist_get_functions(list);
+    dlist_set_functions(list, func_create());
+    dlist_add_printing_function(list, dlist_print_int, "int");
+    dlist_add_printing_function(list, struct_print, "structure");
+    dlist_print(list);
+    func_delete(dlist_get_functions(list));
+    dlist_set_functions(list, funcs);
     dlist_print(list);
 
     //delete test

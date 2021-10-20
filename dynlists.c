@@ -6,6 +6,11 @@
 dlist *dlist_new() {
 
     dlist* aux = malloc(sizeof(dlist));
+
+    if (!aux) {
+        return NULL;
+    }
+
     aux->count=0;
     aux->head=NULL;
     aux->tail=NULL;
@@ -22,6 +27,11 @@ void dlist_append(dlist *list,void *data,char *type) {
 
     if (!(list->head)) {
         list->head = malloc(sizeof(dnode));
+        
+        if (list->head==NULL) {
+            return;
+        }
+
         list->tail = list->head;
         list->count = 1;
         list->head->data=data;
@@ -33,6 +43,11 @@ void dlist_append(dlist *list,void *data,char *type) {
 
     dnode *aux = list->tail;
     list->tail->next = malloc(sizeof(dnode));
+
+    if (list->tail->next==NULL) {
+        return;
+    }
+
     list->tail = list->tail->next;
     list->count += 1;
     list->tail->data=data;
@@ -232,6 +247,11 @@ void *dlist_pop(dlist *list, int index) {
 
     aux = dlist_get_node(list,index);
 
+    if (!aux) {
+        puts("error: cannot get node");
+        return NULL;
+    }
+
     aux->next->prev = aux->prev;
     aux->prev->next = aux->next;
     res = aux->data;
@@ -259,6 +279,11 @@ void dlist_insert(dlist *list,int index, void *data,char *type) {
     
     if (index<=0) {
         aux = malloc(sizeof(dnode));
+
+        if (!aux) {
+            return;
+        }
+
         aux->data=data;
         aux->next=list->head;
         aux->prev=NULL;
@@ -270,8 +295,18 @@ void dlist_insert(dlist *list,int index, void *data,char *type) {
 
 
     dnode *node = dlist_get_node(list,index);
+
+    if (!node) {
+        puts("error cannot get node");
+        return;
+    }
     
     aux = malloc(sizeof(dnode));
+
+    if (!aux) {
+        return;
+    }
+
     aux->data=data;
     aux->next=node;
     aux->prev=node->prev;
@@ -470,8 +505,14 @@ void *dlist_get(dlist *list, int index) {
     if (!list) {
         return NULL;
     }
-        
-    return dlist_get_node(list,index)->data;
+    
+    dnode* node = dlist_get_node(list,index);
+
+    if (!node) {
+        return NULL;
+    }
+
+    return node->data;
 }
 
 void dlist_set(dlist *list, void *data, int index) {
@@ -480,6 +521,10 @@ void dlist_set(dlist *list, void *data, int index) {
     }
 
     dnode* node = dlist_get_node(list,index);
+
+    if (!node) {
+        return;
+    }
 
     node->data=data;
     return;
@@ -512,8 +557,6 @@ int dlist_get_index(dlist *list, dnode* node) {
 }
 
 dnode* dlist_get_node(dlist *list, int index) {
-
-    //HANDLE ALL CASES WHERE THIS FUNCTION IS CALLED BECAUSE IT MAY RETURN NULL!
     
     if (!list) {
         return NULL;
@@ -588,6 +631,11 @@ int dlist_partition(dlist *list, int left, int right) {
     dnode *right_iterator = &right_start;
 
     dnode *head = dlist_get_node(list,left);
+
+    if (left_start.next == NULL || right_start.prev == NULL || head == NULL) {
+        puts("error: cannot get node");
+        return left;
+    }
 
     dnode *aux;
 
@@ -717,6 +765,11 @@ void func_add_type(function_library *functions, char *type) {
 
     if (functions->size==0) {
         functions->array=malloc(sizeof(type_data));
+
+        if (functions->array==NULL) {
+            return;
+        }
+
         functions->array[0].cmp_function=NULL;
         functions->array[0].print_function=NULL;
         strcpy(functions->array[0].type,type);
@@ -725,8 +778,14 @@ void func_add_type(function_library *functions, char *type) {
     }
 
     else {
+        type_data *aux = realloc(functions->array,(functions->size+1)*sizeof(type_data));
+        
+        if (!aux) {
+            return;
+        }
+        
         functions->size+=1;
-        functions->array=realloc(functions->array,functions->size*sizeof(type_data));
+        functions->array=aux;
         functions->array[functions->size-1].cmp_function=NULL;
         functions->array[functions->size-1].print_function=NULL;
         strcpy(functions->array[functions->size-1].type,type);
@@ -787,6 +846,11 @@ void func_delete(function_library *functions) {
 
 function_library *func_create() {
     function_library *res = malloc(sizeof(function_library));
+
+    if (!res) {
+        return NULL;
+    }
+
     res->array=NULL;
     res->size=0;
     return res;
