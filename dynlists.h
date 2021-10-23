@@ -4,18 +4,22 @@
 typedef void (*print_func)(void *);
 typedef int (*cmp_func)(const void *,const void *);
 
+
 typedef struct single_type {
+    //Holds info about functions for specific type
     print_func print_function;
     cmp_func cmp_function;
     char type[20];
 } type_data;
 
 typedef struct fun_library {
+    //Stores library of functions
     type_data *array;
     int size;
 } function_library;
 
 typedef struct single_node {
+    //node of a list
     struct single_node *prev;
     struct single_node *next;
     char type[20];
@@ -23,6 +27,7 @@ typedef struct single_node {
 } dnode;
 
 typedef struct list_interface {
+    //list structure used for almost all operations
     dnode *head;
     dnode *tail;
     int count;

@@ -4,7 +4,9 @@
 #include "dynlists.h"
 
 dlist *dlist_new() {
-
+    /** This function creates and returns
+     * structure with new dynamic list
+     */
     dlist* aux = malloc(sizeof(dlist));
 
     if (!aux) {
@@ -20,7 +22,11 @@ dlist *dlist_new() {
 }
 
 void dlist_append(dlist *list,void *data,char *type) {
-        
+    
+    /** This function adds data to the end of list
+     * type describes type of data and is chosen by developer
+     */     
+    
     if (!list) {
         return;
     }
@@ -59,6 +65,11 @@ void dlist_append(dlist *list,void *data,char *type) {
 
 void dlist_clear(dlist *list) {
 
+    /**This function deletes all elements of the list
+     * and also it frees memory of all data that
+     * has been added to the list
+     */
+    
     if (!list ) {
         return;
     }
@@ -80,6 +91,11 @@ void dlist_clear(dlist *list) {
 
 void dlist_delete(dlist *list) {
 
+    /**This function deletes entire list.
+     * It also frees memory of all data that
+     * has been added to the list
+     */
+
     dlist_clear(list);
     func_delete(list->functions);
     free(list);
@@ -88,6 +104,11 @@ void dlist_delete(dlist *list) {
 
 void dlist_print_with_func(dlist *list, print_func printing_function) {
 
+    /**This function attempts to print all data in list using printing_function
+     * which must be the type of:
+     * void (*print_func)(void *)
+     */
+    
     if (!list) {
         return;
     }
@@ -107,6 +128,12 @@ void dlist_print_with_func(dlist *list, print_func printing_function) {
 }
 
 void dlist_print(dlist *list) {
+
+    /**This function attempts to print data in list
+     * using functions that are available in the functions library
+     * if there isn't function with matching type, the data is skipped
+     * and not printed
+     */
 
     if (!list) {
         return;
@@ -135,6 +162,8 @@ void dlist_print(dlist *list) {
 
 void dlist_printb(dlist *list) {
 
+    /**Same as dlist_print() but it prints elements starting from tail*/
+    
     if (!list) {
         return;
     }
@@ -162,6 +191,8 @@ void dlist_printb(dlist *list) {
 
 void dlist_print_int(void *data) {
 
+    /**Function for printing integers, can be added to func libraries*/
+
     int *integer = (int *) data;
     printf("%d",*integer);
     return;
@@ -170,6 +201,8 @@ void dlist_print_int(void *data) {
 
 void dlist_print_string(void *data) {
 
+    /**Function for printing strings, can be added to func libraries*/
+
     char *string = (char *) data;
     printf("%s", string);
     return;
@@ -177,6 +210,8 @@ void dlist_print_string(void *data) {
 }
 
 int dlist_compare_int(const void *one ,const void *two) {
+
+    /**Function for comparing integers, can be added to func libraries*/
 
     const int *a = (const int *)one;
     const int *b = (const int *)two;
@@ -187,6 +222,8 @@ int dlist_compare_int(const void *one ,const void *two) {
 
 int dlist_compare_string(const void *one ,const void *two) {
 
+    /**Function for comparing strings, can be added to func libraries*/
+
     const char *a = (const char *)one;
     const char *b = (const char *)two;
 
@@ -195,6 +232,10 @@ int dlist_compare_string(const void *one ,const void *two) {
 }
 
 void *dlist_pop(dlist *list, int index) {
+
+    /**This function returns pointer to data with specific index on the list.
+     * Data is deleted from list but it is not freed
+     */
 
     if (!list) {
         return NULL;
@@ -262,6 +303,10 @@ void *dlist_pop(dlist *list, int index) {
 
 void dlist_insert(dlist *list,int index, void *data,char *type) {
 
+    /**Inserts data at index. if the index is too low it is placed on head.
+     * If index is too large it is placed at the end.
+     */
+    
     if (!list) {
         return;
     }
@@ -289,6 +334,7 @@ void dlist_insert(dlist *list,int index, void *data,char *type) {
         aux->prev=NULL;
         strcpy(aux->type,type);
         list->count+=1;
+        list->head->prev=aux;
         list->head=aux;
         return;
     }
@@ -320,6 +366,10 @@ void dlist_insert(dlist *list,int index, void *data,char *type) {
 
 void dlist_append_list(dlist *dest, dlist *src) {
 
+    /**Appends all elements from src to the end of dest
+     * src is empty after this operation
+     */
+
     if (!(dest && src)) {
         return;
     }
@@ -350,6 +400,8 @@ void dlist_append_list(dlist *dest, dlist *src) {
 
 void dlist_reverse(dlist *list) {
 
+    /**Reverses order in the list*/
+
     if (list==NULL || list->count<2) {
         return;
     }
@@ -372,6 +424,10 @@ void dlist_reverse(dlist *list) {
 }
 
 int dlist_count(dlist *list , void *target, char *type) {
+
+    /**Returns count of target in list.
+     * Requires compare function
+    */
 
     if (!list) {
         return -1;
@@ -406,6 +462,11 @@ int dlist_count(dlist *list , void *target, char *type) {
 }
 
 int dlist_index(dlist *list , void *target, char *type) {
+
+    /**Retuns index of first element that matches target.
+     * Requires compare function.
+    */
+
     if (!list) {
         return -1;
     }
@@ -440,6 +501,11 @@ int dlist_index(dlist *list , void *target, char *type) {
 }
 
 int dlist_indexb(dlist *list , void *target, char *type) {
+    
+    /**Returns the first element that matches target starting from tail
+     * Requires compare function to work
+     */ 
+
     if (!list) {
         return -1;
     }
@@ -475,33 +541,46 @@ int dlist_indexb(dlist *list , void *target, char *type) {
 
 void dlist_remove(dlist *list, void *target, char *type) {
 
+    /**Removes first element that matches target 
+     * and frees its memory.
+     * Requires compare function to work.
+     */
+
     if (!list) {
         return;
     }
 
     int index = dlist_index(list,target,type);
+
     if (index<0) {
         return;
     }
+    
     free(dlist_pop(list,index));
     return;
 }
 void dlist_removeb(dlist *list, void *target, char *type) {
+
+    /** Same as dlist_remove but starts from tail*/
 
     if (!list) {
         return;
     }
 
     int index = dlist_indexb(list,target,type);
+    
     if (index<0) {
         return;
     }
+    
     free(dlist_pop(list,index));
     return;
 }
 
 void *dlist_get(dlist *list, int index) {
     
+    /**Returns element with given index from list*/
+
     if (!list) {
         return NULL;
     }
@@ -516,6 +595,9 @@ void *dlist_get(dlist *list, int index) {
 }
 
 void dlist_set(dlist *list, void *data, int index) {
+    
+    /**Updates element in the list*/
+
     if (!list) {
         return;
     }
@@ -532,6 +614,8 @@ void dlist_set(dlist *list, void *data, int index) {
 
 int dlist_get_size(dlist *list) {
     
+    /**Returns number of elements in list*/
+
     if (!list) {
         return -1;
     }
@@ -541,6 +625,8 @@ int dlist_get_size(dlist *list) {
 
 int dlist_get_index(dlist *list, dnode* node) {
     
+    /*Function that returns index of a given node*/
+
     if (!list || !node) {
         return -1;
     }
@@ -558,6 +644,8 @@ int dlist_get_index(dlist *list, dnode* node) {
 
 dnode* dlist_get_node(dlist *list, int index) {
     
+    /*Returns node with matching index*/
+
     if (!list) {
         return NULL;
     }
@@ -575,6 +663,9 @@ dnode* dlist_get_node(dlist *list, int index) {
 }
 
 void dlist_sort(dlist *list) {
+    
+    /**Sort the list*/
+
     if (!list || list->head==NULL || list->count==1) {
         return;
     }
@@ -585,6 +676,11 @@ void dlist_sort(dlist *list) {
 }
 
 int check_position(dnode *head, dnode *tail) {
+
+    /**Returns 1 if head is before tail on the list
+     * and 0 otherwise
+     */ 
+
     dnode *iterator = head;
     while(iterator) {
         iterator=iterator->next;
@@ -597,6 +693,9 @@ int check_position(dnode *head, dnode *tail) {
 }
 
 void dlist_quicksort(dlist *list, int left, int right) {
+    
+    /*Quicksort function*/
+
     if(left<right) {
         int border = dlist_partition(list, left,right);
         dlist_quicksort(list, left,border);
@@ -607,6 +706,8 @@ void dlist_quicksort(dlist *list, int left, int right) {
 
 void dlist_print_ptrs(dlist *list) {
     
+    /**Function that prints pointers to nodes in the list*/
+
     if (!list) {
         return;
     }
@@ -621,6 +722,8 @@ void dlist_print_ptrs(dlist *list) {
 }
 
 int dlist_partition(dlist *list, int left, int right) {
+
+    /*Partition used in quicksort*/
 
     dnode left_start;
     left_start.next = dlist_get_node(list,left);
@@ -665,6 +768,8 @@ int dlist_partition(dlist *list, int left, int right) {
 
 int dlist_general_compare(dlist *list, dnode *a, dnode *b) {
     
+    /*Function comparing two nodes*/
+
     if (strcmp(a->type,b->type)) {
         return strcmp(a->type,b->type);
     }
@@ -688,8 +793,10 @@ int dlist_general_compare(dlist *list, dnode *a, dnode *b) {
 
 void dlist_swap(dlist *list,dnode *a, dnode *b) {
     
-    //a must be before b if you want this to work!
-    
+    /*Function that swaps a with b
+     *a must be before b if you want this to work!
+     */
+
     if (!a || !b) {
         return;
     }
@@ -752,6 +859,9 @@ void dlist_swap(dlist *list,dnode *a, dnode *b) {
 
 
 void func_clear(function_library *functions) {
+    
+    /**Deletes all functions from functions library*/
+
     functions->size=0;
     free(functions->array);
     functions->array=NULL;
@@ -759,6 +869,8 @@ void func_clear(function_library *functions) {
 
 void func_add_type(function_library *functions, char *type) {
     
+    /*adds new type to the list*/
+
     if (!functions) {
         return;
     }
@@ -794,6 +906,9 @@ void func_add_type(function_library *functions, char *type) {
 }
 
 void func_add_print(function_library *functions, print_func function, char *type) {
+    
+    /**Adds printing function to functions library*/
+
     if (!functions) {
         return;
     }
@@ -817,6 +932,9 @@ void func_add_print(function_library *functions, print_func function, char *type
 }
 
 void func_add_cmp(function_library *functions, cmp_func function, char *type) {
+    
+    /**Ads compare function to functions library*/
+    
     if (!functions) {
         return;
     }
@@ -840,11 +958,17 @@ void func_add_cmp(function_library *functions, cmp_func function, char *type) {
 }
 
 void func_delete(function_library *functions) {
+    
+    /**Deletes functions library*/
+    
     func_clear(functions);
     free(functions);
 }
 
 function_library *func_create() {
+
+    /**Creates new function library*/
+
     function_library *res = malloc(sizeof(function_library));
 
     if (!res) {
@@ -857,25 +981,30 @@ function_library *func_create() {
 }
 
 void dlist_add_printing_function(dlist *list, print_func function, char *type) {
+    /**Adds printing function to list function library*/
     func_add_print(list->functions, function, type);
     return;
 }
 
 void dlist_add_compare_function(dlist *list, cmp_func function, char *type) {
+    /**Adds compare function to list function library*/
     func_add_cmp(list->functions, function, type);
     return;
 }
 
 void dlist_clear_functions(dlist *list) {
+    /**Removes all added functions from list*/
     func_clear(list->functions);
     return;
 }
 
 void dlist_set_functions(dlist *list, function_library *functions) {
+    /**Sets the new library of functions for list to use*/
     list->functions=functions;
     return;
 }
 
 function_library *dlist_get_functions(dlist *list) {
+    /**Returns function library of list*/
     return list->functions;
 }
